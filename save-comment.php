@@ -1,5 +1,5 @@
 <?php
-
+require_once('libraries/database.php');
 /**
  * CE FICHIER DOIT ENREGISTRER UN NOUVEAU COMMENTAIRE EST REDIRIGER SUR L'ARTICLE !
  * 
@@ -55,10 +55,14 @@ if (!$author || !$article_id || !$content) {
  * 
  * PS : Ca fait pas genre 3 fois qu'on écrit ces lignes pour se connecter ?! 
  */
-$pdo = new PDO('mysql:host=localhost;dbname=blogpoo;charset=utf8', 'root', 'Neyen-2017', [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-]);
+
+/**
+ * 1. Connexion à la base de données avec PDO
+ * Attention, on précise ici deux options :
+ * - Le mode d'erreur : le mode exception permet à PDO de nous prévenir violament quand on fait une connerie ;-)
+ * - Le mode d'exploitation : FETCH_ASSOC veut dire qu'on exploitera les données sous la forme de tableaux associatifs
+ */
+$pdo = getPdo();
 
 $query = $pdo->prepare('SELECT * FROM articles WHERE id = :article_id');
 $query->execute(['article_id' => $article_id]);
